@@ -1,33 +1,31 @@
 import './App.css'
+import TodoList from "./components/TodoList/TodoList.tsx";
+
+export type TasksType = {
+    id: number;
+    title: string;
+    isDone: boolean;
+}
+
+const tasks_1: TasksType[] = [
+    {id: 1, title: "HTML&CSS", isDone: true},
+    {id: 2, title: "JS", isDone: true},
+    {id: 3, title: "React", isDone: false}
+];
+
+const tasks_2: TasksType[] = [
+    {id: 4, title: "Milk", isDone: true},
+    {id: 5, title: "Coffee", isDone: true},
+    {id: 6, title: "Pizzza", isDone: false}
+];
 
 function App() {
-  return (
-      <div className="app">
-        <div>
-          <h3>What to learn</h3>
-          <div>
-            <input/>
-            <button>+</button>
-          </div>
-          <ul>
-            <li>
-              <input type="checkbox" checked={true}/> <span>HTML&CSS</span>
-            </li>
-            <li>
-              <input type="checkbox" checked={true}/> <span>JS</span>
-            </li>
-            <li>
-              <input type="checkbox" checked={false}/> <span>React</span>
-            </li>
-          </ul>
-          <div>
-            <button>All</button>
-            <button>Active</button>
-            <button>Completed</button>
-          </div>
+    return (
+        <div className="app">
+            <TodoList title={"What to learn"} tasks={tasks_1} />
+            <TodoList title={"What to buy"} tasks={tasks_2} />
         </div>
-      </div>
-  )
+    )
 }
 
 export default App
