@@ -1,37 +1,42 @@
-import {TasksType} from "../../App.tsx";
+import {FilterNameType, TasksType} from "../../App.tsx";
 import Button from "../Button/Button.tsx";
+import css from "./TodoList.module.css";
 
 type PropsType = {
     title: string;
     tasks: TasksType[];
+    deleteTask: (id: number) => void;
+    filterTasks: (filterName: FilterNameType) => void;
 }
 
-const TodoList = (props: PropsType) => {
+const TodoList = ({title, tasks, deleteTask, filterTasks}: PropsType) => {
 
-    const tasksList = props.tasks.map((task: TasksType) => {
+    const tasksList = tasks.map((task: TasksType) => {
         return (
             <li key={task.id}>
-                <input type="checkbox" checked={task.isDone}/> <span>{task.title}</span>
+                <input type="checkbox" checked={task.isDone}/>
+                <span>{task.title}</span>
+                <button onClick={() => deleteTask(task.id)}>X</button>
             </li>
         )
     });
 
     const taskListContent = tasksList.length === 0
         ? <p>Your tasks list is empty</p>
-        : <ul>{tasksList}</ul>
+        : <ul className={css.todoList}>{tasksList}</ul>
 
     return (
         <div className={"todoList"}>
-            <h3>{props.title}</h3>
+            <h3>{title}</h3>
             <div>
                 <input/>
                 <Button title={"+"}/>
             </div>
             {taskListContent}
             <div>
-                <Button title={"All"}/>
-                <Button title={"Active"}/>
-                <Button title={"Completed"}/>
+                <button onClick={() => filterTasks("All")}>All</button>
+                <button onClick={() => filterTasks("Active")}>Active</button>
+                <button onClick={() => filterTasks("Completed")}>Completed</button>
             </div>
         </div>
     );
