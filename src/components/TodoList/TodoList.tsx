@@ -30,13 +30,13 @@ const TodoList = ({title, tasks, deleteTask, filterTasks}: PropsType) => {
             <h3>{title}</h3>
             <div>
                 <input/>
-                <Button title={"+"}/>
+                <Button text={"+"} callBack={() => {}}/>
             </div>
             {taskListContent}
             <div>
-                <button onClick={() => filterTasks("All")}>All</button>
-                <button onClick={() => filterTasks("Active")}>Active</button>
-                <button onClick={() => filterTasks("Completed")}>Completed</button>
+                <Button text={"All"} callBack={() => filterTasks("All")}/>
+                <Button text={"Active"} callBack={() => filterTasks("Active")}/>
+                <Button text={"Completed"} callBack={() => filterTasks("Completed")}/>
             </div>
         </div>
     );

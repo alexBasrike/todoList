@@ -1,10 +1,11 @@
 type ButtonProps = {
-    title: string;
+    text: string;
+    callBack: () => void;
 }
 
-const Button = ({title}: ButtonProps) => {
+const Button = ({text, callBack}: ButtonProps) => {
     return (
-        <button>{title}</button>
+        <button onClick={callBack}>{text}</button>
     )
 }
 
