@@ -1,33 +1,31 @@
 import './App.css'
+import TodoList from "./components/TodoList/TodoList.tsx";
+import {v1} from "uuid";
+import {useState} from "react";
+
+export type TypeForTasks = {
+    id: string
+    title: string
+    isDone: boolean
+}
 
 function App() {
-  return (
-      <div className="app">
-        <div>
-          <h3>What to learn</h3>
-          <div>
-            <input/>
-            <button>+</button>
-          </div>
-          <ul>
-            <li>
-              <input type="checkbox" checked={true}/> <span>HTML&CSS</span>
-            </li>
-            <li>
-              <input type="checkbox" checked={true}/> <span>JS</span>
-            </li>
-            <li>
-              <input type="checkbox" checked={false}/> <span>React</span>
-            </li>
-          </ul>
-          <div>
-            <button>All</button>
-            <button>Active</button>
-            <button>Completed</button>
-          </div>
+
+    const [initialState, setInitialState] = useState<Array<TypeForTasks>>([
+        {id: v1(), title: 'HTML&CSS', isDone: true},
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'Redux', isDone: false},
+        {id: v1(), title: 'WP', isDone: false}
+    ]);
+
+    let tasks: Array<TypeForTasks> = initialState;
+
+    return (
+        <div className="app">
+            <TodoList title={'What to learn'} tasks={tasks} />
         </div>
-      </div>
-  )
+    )
 }
 
 export default App
