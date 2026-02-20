@@ -1,3 +1,13 @@
 .formAddTask {
     margin: 0 0 20px 0;
 }
+
+.notValid {
+    border-color: #f00;
+    outline: none;
+}
+
+.errorMessage {
+    font-size: 12px;
+    color: red;
+}
