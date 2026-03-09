@@ -1,0 +1,38 @@
+.todoList {
+    margin: 0;
+    padding: 0;
+
+    h2 {
+        margin: 0 0 10px 0;
+    }
+}
+
+.todoList__form {
+    margin: 0 0 20px 0;
+}
+
+.todoList__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 0 20px 0;
+
+    li {
+        display: flex;
+        gap: 10px;
+
+        button {
+            margin-left: auto;
+        }
+    }
+}
+
+.todoList__buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.activeButton {
+    background-color: cornflowerblue;
+    color: #fff;
+}

@@ -1,33 +1,100 @@
+import './index.css'
 import './App.css'
+import TodoList from "./components/TodoList/TodoList.tsx";
+import {useState} from "react";
+import {v1} from "uuid";
+
+export type TodoListsFilterType = 'all' | 'active' | 'completed';
+
+export type TodoListsType = {
+    id: string
+    title: string
+    filter: TodoListsFilterType
+}
+
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
+
+type InitialTasksType = {
+    [key: TodoListsType['id']]: TaskType[]
+}
 
 function App() {
-  return (
-      <div className="app">
-        <div>
-          <h3>What to learn</h3>
-          <div>
-            <input/>
-            <button>+</button>
-          </div>
-          <ul>
-            <li>
-              <input type="checkbox" checked={true}/> <span>HTML&CSS</span>
-            </li>
-            <li>
-              <input type="checkbox" checked={true}/> <span>JS</span>
-            </li>
-            <li>
-              <input type="checkbox" checked={false}/> <span>React</span>
-            </li>
-          </ul>
-          <div>
-            <button>All</button>
-            <button>Active</button>
-            <button>Completed</button>
-          </div>
+
+    const todoListOne: TodoListsType['id'] = v1();
+    const todoListTwo: TodoListsType['id'] = v1();
+
+    const [todoLists, setTodoLists] = useState<TodoListsType[]>([
+        {id: todoListOne, title: 'What to learn', filter: 'all'},
+        {id: todoListTwo, title: 'What to buy', filter: 'all'},
+    ]);
+
+    const [initialTasks, setInitialTasks] = useState<InitialTasksType>({
+        [todoListOne]: [
+            {id: v1(), title: 'HTML&CSS', isDone: true},
+            {id: v1(), title: 'JS', isDone: true},
+            {id: v1(), title: 'React', isDone: false},
+            {id: v1(), title: 'Redux', isDone: false},
+        ],
+        [todoListTwo]: [
+            {id: v1(), title: 'Milk', isDone: false},
+            {id: v1(), title: 'Sugar', isDone: false},
+            {id: v1(), title: 'Banana', isDone: true},
+        ],
+    });
+
+    const addTask = (todoListID: TodoListsType['id'], taskTitle: TodoListsType['title']) => {
+        const newTask = {id: v1(), title: taskTitle, isDone: false}
+        setInitialTasks({...initialTasks, [todoListID]: [newTask, ...initialTasks[todoListID]]});
+    }
+
+    const deleteTask = (todoListID: TodoListsType['id'], taskID: TaskType['id']) => {
+        setInitialTasks({...initialTasks, [todoListID]: initialTasks[todoListID].filter(task => task.id !== taskID)});
+    }
+
+    const changeTaskStatus = (todoListID: TodoListsType['id'], taskID: TaskType['id'], newTaskStatus: TaskType['isDone']) => {
+        setInitialTasks({...initialTasks, [todoListID]: initialTasks[todoListID].map(task => task.id === taskID ? {...task, isDone: newTaskStatus} : task)});
+    }
+
+    const changeTasksStatus = (todoListID: TodoListsType['id'], newFilterValue: TodoListsType['filter']) => {
+        setTodoLists(todoLists.map(todoList => todoList.id === todoListID ? {...todoList, filter: newFilterValue} : todoList));
+    }
+
+    return (
+        <div className="app">
+
+            <div className="todoLists">
+                {todoLists.map(todoItem => {
+
+                    let tasks: TaskType[] = initialTasks[todoItem.id];
+                    if (todoItem.filter === 'active') {
+                        tasks = initialTasks[todoItem.id].filter(task => !task.isDone);
+                    }
+                    if (todoItem.filter === 'completed') {
+                        tasks = initialTasks[todoItem.id].filter(task => task.isDone);
+                    }
+
+                    return (
+                        <TodoList
+                            key={todoItem.id}
+                            todoListID={todoItem.id}
+                            title={todoItem.title}
+                            tasks={tasks}
+                            addTask={addTask}
+                            deleteTask={deleteTask}
+                            changeTaskStatus={changeTaskStatus}
+                            changeTasksStatus={changeTasksStatus}
+                            filterValue={todoItem.filter}
+                        />
+                    )
+                })}
+            </div>
+
         </div>
-      </div>
-  )
+    )
 }
 
 export default App

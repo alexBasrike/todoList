@@ -1,8 +1,15 @@
-.app {
-  padding: 30px;
-  display: flex;
+body {
+    background: #000;
+    color: #fff;
 }
 
-.app > div {
-  margin-right: 50px;
+button {
+    cursor: pointer;
+}
+
+.todoLists {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 30px;
 }
