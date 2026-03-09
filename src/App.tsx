@@ -47,6 +47,10 @@ function App() {
         ],
     });
 
+    const updateTodoListTitle = (todoListID: TodoListsType['id'], newTitle: TodoListsType['title']) => {
+        setTodoLists(prevState => prevState.map(todoList => todoList.id === todoListID ? {...todoList, title: newTitle} : todoList));
+    }
+
     const addTodoList = (todoListTitle: TodoListsType['title']) => {
         const newTodoList: TodoListsType = {id: v1(), title: todoListTitle, filter: 'all'};
         setTodoLists([newTodoList, ...todoLists]);
@@ -58,9 +62,13 @@ function App() {
         delete initialTasks[todolistID];
     }
 
-    const addTask = (todoListID: TodoListsType['id'], taskTitle: TodoListsType['title']) => {
+    const addTask = (todoListID: TodoListsType['id'], taskTitle: TaskType['title']) => {
         const newTask = {id: v1(), title: taskTitle, isDone: false}
         setInitialTasks({...initialTasks, [todoListID]: [newTask, ...initialTasks[todoListID]]});
+    }
+
+    const updateTaskTitle = (todoListID: TodoListsType['id'], taskID: TaskType['id'], newTaskTitle: TaskType['title']) => {
+        setInitialTasks({...initialTasks, [todoListID]: initialTasks[todoListID].map(task => task.id === taskID ? {...task, title: newTaskTitle} : task)});
     }
 
     const deleteTask = (todoListID: TodoListsType['id'], taskID: TaskType['id']) => {
@@ -108,9 +116,11 @@ function App() {
                             key={todoItem.id}
                             todoListID={todoItem.id}
                             title={todoItem.title}
+                            updateTodoListTitle={updateTodoListTitle}
                             deleteTodoList={deleteTodoList}
                             tasks={tasks}
                             addTask={addTask}
+                            updateTaskTitle={updateTaskTitle}
                             deleteTask={deleteTask}
                             changeTaskStatus={changeTaskStatus}
                             changeTasksStatus={changeTasksStatus}

@@ -1,13 +1,16 @@
 import {TaskType, TodoListsType} from "../../App.tsx";
 import css from "./TodoList.module.css";
 import AddItem from "../AddItem/AddItem.tsx";
+import EditableText from "../EditableText/EditableText.tsx";
 
 type TodoListPropsType = {
     todoListID: TodoListsType['id']
     title: TodoListsType['title']
     tasks: TaskType[]
+    updateTodoListTitle: (todoListID: TodoListsType['id'], newTitle: TodoListsType['title']) => void
     deleteTodoList: (todolistID: TodoListsType['id']) => void
     addTask: (todoListID: TodoListsType['id'], taskTitle: TodoListsType['title']) => void
+    updateTaskTitle: (todoListID: TodoListsType['id'], taskID: TaskType['id'], taskTitle: TaskType['title']) => void
     deleteTask: (todoListID: TodoListsType['id'], taskID: TaskType['id']) => void
     changeTaskStatus: (todoListID: TodoListsType['id'], taskID: TaskType['id'], newTaskStatus: TaskType['isDone']) => void
     changeTasksStatus: (todoListID: TodoListsType['id'], newFilterValue: TodoListsType['filter']) => void
@@ -15,12 +18,27 @@ type TodoListPropsType = {
 }
 
 const TodoList = (
-    {todoListID, title, tasks, deleteTodoList, addTask, deleteTask, changeTaskStatus, changeTasksStatus, filterValue}: TodoListPropsType
+    {
+        todoListID,
+        title,
+        tasks,
+        updateTodoListTitle,
+        deleteTodoList,
+        addTask,
+        updateTaskTitle,
+        deleteTask,
+        changeTaskStatus,
+        changeTasksStatus,
+        filterValue
+    }: TodoListPropsType
 ) => {
 
     const addTaskHandler = (taskTitle: TaskType['title']) => {
         addTask(todoListID, taskTitle);
     }
+
+    const updateTodoListTitleHandler = (updatedText: string) => updateTodoListTitle(todoListID, updatedText);
+    const updateTaskTitleHandler = (updatedText: string, taskID: string) => updateTaskTitle(todoListID, taskID, updatedText);
 
     const activeButtonHandlerAll = filterValue === 'all' ? css.activeButton : '';
     const activeButtonHandlerActive = filterValue === 'active' ? css.activeButton : '';
@@ -34,11 +52,11 @@ const TodoList = (
         <div className={css.todoList}>
 
             <div className={css.todoList__header}>
-                <h2>{title}</h2>
+                <h2><EditableText text={title} callBack={updateTodoListTitleHandler}/></h2>
                 <button onClick={() => deleteTodoList(todoListID)}>x</button>
             </div>
 
-            <AddItem text={''} callBack={addTaskHandler} />
+            <AddItem text={''} callBack={addTaskHandler}/>
 
             {
                 tasks.length === 0
@@ -48,7 +66,7 @@ const TodoList = (
                             <li key={task.id}>
                                 <input type="checkbox" checked={task.isDone}
                                        onChange={(e) => changeTaskStatus(todoListID, task.id, e.currentTarget.checked)}/>
-                                <span>{task.title}</span>
+                                <span><EditableText text={task.title} callBack={(updatedText: string) => updateTaskTitleHandler(updatedText, task.id)}/></span>
                                 <button onClick={() => deleteTask(todoListID, task.id)}>x</button>
                             </li>
                         ))}
