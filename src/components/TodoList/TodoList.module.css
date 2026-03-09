@@ -3,12 +3,15 @@
     padding: 0;
 
     h2 {
-        margin: 0 0 10px 0;
+        margin: 0;
     }
 }
 
-.todoList__form {
-    margin: 0 0 20px 0;
+.todoList__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0 0 10px 0;
 }
 
 .todoList__list {

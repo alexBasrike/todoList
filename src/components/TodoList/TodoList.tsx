@@ -1,11 +1,12 @@
 import {TaskType, TodoListsType} from "../../App.tsx";
 import css from "./TodoList.module.css";
-import {useState, KeyboardEvent} from "react";
+import AddItem from "../AddItem/AddItem.tsx";
 
 type TodoListPropsType = {
     todoListID: TodoListsType['id']
     title: TodoListsType['title']
     tasks: TaskType[]
+    deleteTodoList: (todolistID: TodoListsType['id']) => void
     addTask: (todoListID: TodoListsType['id'], taskTitle: TodoListsType['title']) => void
     deleteTask: (todoListID: TodoListsType['id'], taskID: TaskType['id']) => void
     changeTaskStatus: (todoListID: TodoListsType['id'], taskID: TaskType['id'], newTaskStatus: TaskType['isDone']) => void
@@ -14,20 +15,11 @@ type TodoListPropsType = {
 }
 
 const TodoList = (
-    {todoListID, title, tasks, addTask, deleteTask, changeTaskStatus, changeTasksStatus, filterValue}: TodoListPropsType
+    {todoListID, title, tasks, deleteTodoList, addTask, deleteTask, changeTaskStatus, changeTasksStatus, filterValue}: TodoListPropsType
 ) => {
 
-    const [inputValue, setInputValue] = useState('');
-
-    const addTaskHandler = () => {
-        addTask(todoListID, inputValue);
-        setInputValue('');
-    }
-
-    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            addTaskHandler();
-        }
+    const addTaskHandler = (taskTitle: TaskType['title']) => {
+        addTask(todoListID, taskTitle);
     }
 
     const activeButtonHandlerAll = filterValue === 'all' ? css.activeButton : '';
@@ -40,16 +32,13 @@ const TodoList = (
 
     return (
         <div className={css.todoList}>
-            <h2>{title}</h2>
 
-            <div className={css.todoList__form}>
-                <input
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={onKeyDownHandler}
-                />
-                <button onClick={addTaskHandler}>+</button>
+            <div className={css.todoList__header}>
+                <h2>{title}</h2>
+                <button onClick={() => deleteTodoList(todoListID)}>x</button>
             </div>
+
+            <AddItem text={''} callBack={addTaskHandler} />
 
             {
                 tasks.length === 0

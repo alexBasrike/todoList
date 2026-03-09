@@ -3,6 +3,7 @@ import './App.css'
 import TodoList from "./components/TodoList/TodoList.tsx";
 import {useState} from "react";
 import {v1} from "uuid";
+import AddItem from "./components/AddItem/AddItem.tsx";
 
 export type TodoListsFilterType = 'all' | 'active' | 'completed';
 
@@ -46,6 +47,17 @@ function App() {
         ],
     });
 
+    const addTodoList = (todoListTitle: TodoListsType['title']) => {
+        const newTodoList: TodoListsType = {id: v1(), title: todoListTitle, filter: 'all'};
+        setTodoLists([newTodoList, ...todoLists]);
+        setInitialTasks({...initialTasks, [newTodoList.id]: []});
+    }
+
+    const deleteTodoList = (todolistID: TodoListsType['id']) => {
+        setTodoLists(prevState => prevState.filter(todoList => todoList.id !== todolistID));
+        delete initialTasks[todolistID];
+    }
+
     const addTask = (todoListID: TodoListsType['id'], taskTitle: TodoListsType['title']) => {
         const newTask = {id: v1(), title: taskTitle, isDone: false}
         setInitialTasks({...initialTasks, [todoListID]: [newTask, ...initialTasks[todoListID]]});
@@ -56,15 +68,29 @@ function App() {
     }
 
     const changeTaskStatus = (todoListID: TodoListsType['id'], taskID: TaskType['id'], newTaskStatus: TaskType['isDone']) => {
-        setInitialTasks({...initialTasks, [todoListID]: initialTasks[todoListID].map(task => task.id === taskID ? {...task, isDone: newTaskStatus} : task)});
+        setInitialTasks({
+            ...initialTasks,
+            [todoListID]: initialTasks[todoListID].map(task => task.id === taskID ? {
+                ...task,
+                isDone: newTaskStatus
+            } : task)
+        });
     }
 
     const changeTasksStatus = (todoListID: TodoListsType['id'], newFilterValue: TodoListsType['filter']) => {
-        setTodoLists(todoLists.map(todoList => todoList.id === todoListID ? {...todoList, filter: newFilterValue} : todoList));
+        setTodoLists(todoLists.map(todoList => todoList.id === todoListID ? {
+            ...todoList,
+            filter: newFilterValue
+        } : todoList));
     }
 
     return (
         <div className="app">
+
+            <div className={'addTodoList'}>
+                <h2>Add new TodoList</h2>
+                <AddItem text={''} callBack={addTodoList}/>
+            </div>
 
             <div className="todoLists">
                 {todoLists.map(todoItem => {
@@ -82,6 +108,7 @@ function App() {
                             key={todoItem.id}
                             todoListID={todoItem.id}
                             title={todoItem.title}
+                            deleteTodoList={deleteTodoList}
                             tasks={tasks}
                             addTask={addTask}
                             deleteTask={deleteTask}
