@@ -68,7 +68,7 @@ function App() {
     }
 
     const updateTaskTitle = (todoListID: TodoListsType['id'], taskID: TaskType['id'], newTaskTitle: TaskType['title']) => {
-        setInitialTasks({...initialTasks, [todoListID]: initialTasks[todoListID].map(task => task.id === taskID ? {...task, title: newTaskTitle} : task)});
+        setInitialTasks(prevState => ({...prevState, [todoListID]: prevState[todoListID].map(task => task.id === taskID ? {...task, title: newTaskTitle} : task)}));
     }
 
     const deleteTask = (todoListID: TodoListsType['id'], taskID: TaskType['id']) => {
