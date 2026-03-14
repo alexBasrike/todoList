@@ -1,33 +1,10 @@
-body {
-    background: #000;
-    color: #fff;
-}
-
-h2 {
-    margin: 0 0 10px 0;
-}
-
-p {
-    margin: 0 0 20px 0;
-}
-
-button {
-    cursor: pointer;
-}
-
-
 .app {
-    padding: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
 }
 
-.addTodoList {
-    display: inline-flex;
-    flex-direction: column;
-    margin: 0 0 20px 0;
-}
-
-.todoLists {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
+.container {
+  display: flex;
+  align-items: center;
 }
